@@ -33,11 +33,12 @@ module.exports = function (grunt) {
 
         grunt.log.writeln('Generating key pair named %s...', chalk.cyan(name));
 
-        async.series([
-            async.apply(exec, 'echo n | ssh-keygen -t rsa -b 2048 -N "" -f %s', [file]),
-            async.apply(load),
-            async.apply(upload)
-        ], done);
+        var createKeyCommands = fs.existsSync(file) ?
+            [] : [async.apply(exec, 'ssh-keygen -t rsa -b 2048 -N "" -f %s', [file])];
+        createKeyCommands.push(async.apply(load));
+        createKeyCommands.push(async.apply(upload));
+
+        async.series(createKeyCommands, done);
 
         function load (next) {
             fs.readFile(pubKeyFile, function (err, data) {
