@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 
         function load (next) {
             fs.readFile(pubKeyFile, function (err, data) {
-                pubKey = data.toString('base64');
+                pubKey = data,
                 next(err);
             });
         }
