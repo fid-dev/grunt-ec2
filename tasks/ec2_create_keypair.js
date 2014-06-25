@@ -34,7 +34,7 @@ module.exports = function (grunt) {
         grunt.log.writeln('Generating key pair named %s...', chalk.cyan(name));
 
         async.series([
-            async.apply(exec, 'ssh-keygen -t rsa -b 2048 -N "" -f %s', [file]),
+            async.apply(exec, 'echo n | ssh-keygen -t rsa -b 2048 -N "" -f %s', [file]),
             async.apply(load),
             async.apply(upload)
         ], done);
